@@ -26,6 +26,11 @@ function CruxCounter_Ring:Initialize(control)
         fadeIn  = AM:CreateTimelineFromVirtual("CruxCounter_CruxFadeIn", self.control),
         fadeOut = AM:CreateTimelineFromVirtual("CruxCounter_CruxFadeOut", self.control),
     }
+
+    -- Apply initial visibility state
+    if self.hideZeroStacks then
+        self:SetShowing(CC.State.stacks > 0)
+    end
 end
 
 --- Apply settings to the Ring background
@@ -37,6 +42,11 @@ function CruxCounter_Ring:ApplySettings()
     self:SetRotationEnabled(ring.rotate)
     self:SetHideZeroStacks(ring.hideZeroStacks)
     self:SetColor(ZO_ColorDef:New(ring.color))
+
+    -- Ensure visibility state is correct after settings are applied
+    if self.hideZeroStacks then
+        self:SetShowing(CC.State.stacks > 0)
+    end
 end
 
 --- Start the Ring rotation animation
