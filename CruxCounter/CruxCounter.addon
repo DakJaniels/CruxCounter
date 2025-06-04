@@ -2,8 +2,8 @@
 ## APIVersion: 101046 101047
 ## SavedVariables: CruxCounterData
 ## Description: Got Crux?
-## Version: 1.4.0
-## AddOnVersion: 010400
+## Version: 1.4.1
+## AddOnVersion: 010401
 ## Author: |cFFCCCC@g4rr3t|r (NA)
 ## DependsOn: LibAddonMenu-2.0>=40
 
