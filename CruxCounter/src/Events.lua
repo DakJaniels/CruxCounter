@@ -2,9 +2,10 @@
 -- Init.lua
 -- -----------------------------------------------------------------------------
 
-local EM    = EVENT_MANAGER
+--- @class (partial) CruxCounter
 local CC    = CruxCounter
 local M     = {}
+local EM    = GetEventManager()
 
 --- @type integer Crux ability ID
 M.abilityId = 184220
@@ -18,10 +19,26 @@ end
 
 --- Respond to effect changes.
 --- @see EVENT_EFFECT_CHANGED
---- @param changeType integer Type of effect change, see EffectResult enum for possible values
---- @param stackCount integer Number of stacks at the time of the event
---- @return nil
-local function onEffectChanged(_, changeType, _, _, _, _, _, stackCount)
+--- @param eventId integer
+--- @param changeType EffectResult
+--- @param effectSlot integer
+--- @param effectName string
+--- @param unitTag string
+--- @param beginTime number
+--- @param endTime number
+--- @param stackCount integer
+--- @param iconName string
+--- @param deprecatedBuffType string
+--- @param effectType BuffEffectType
+--- @param abilityType AbilityType
+--- @param statusEffectType StatusEffectType
+--- @param unitName string
+--- @param unitId integer
+--- @param abilityId integer
+--- @param sourceType CombatUnitType
+local function onEffectChanged(eventId, changeType, effectSlot, effectName, unitTag, beginTime, endTime, stackCount,
+                               iconName, deprecatedBuffType, effectType, abilityType, statusEffectType, unitName, unitId,
+                               abilityId, sourceType)
     if changeType == EFFECT_RESULT_FADED then
         CC.State:ClearStacks()
         return
@@ -31,9 +48,10 @@ local function onEffectChanged(_, changeType, _, _, _, _, _, stackCount)
 end
 
 --- Update combat state
+--- @param eventId integer
 --- @param inCombat boolean Whether or not the player is in combat
 --- @return nil
-local function onCombatChanged(_, inCombat)
+local function onCombatChanged(eventId, inCombat)
     CC.State:SetInCombat(inCombat)
 
     if CC.Settings:Get("hideOutOfCombat") and not inCombat then
@@ -47,6 +65,11 @@ end
 --- Note: Sound playback skipped for these stack transitions
 --- @return nil
 local function onPlayerChanged()
+    if CC.arcanistActive() == false then -- NEW u46
+        CruxCounter_Display:RemoveSceneFragments()
+        return
+    end
+
     M:UpdateCombatState()
 
     for i = 1, GetNumBuffs("player") do
@@ -127,6 +150,26 @@ function M:RegisterEvents()
         REGISTER_FILTER_ABILITY_ID, self.abilityId,
         REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER
     )
+    self:Listen("SkillsFullUpdate", EVENT_SKILLS_FULL_UPDATE, function()
+        CC.Debug:Trace(1, "SkillsFullUpdate event fired")
+        if CC.arcanistActive() == false then -- NEW u46
+            CC.Debug:Trace(1, "Arcanist not active, removing scene fragments")
+            CruxCounter_Display:RemoveSceneFragments()
+            return
+        end
+    end)
+
+    self:Listen("ArmoryRestoreResponse", EVENT_ARMORY_BUILD_RESTORE_RESPONSE, function(eventId, result, buildIndex)
+        CC.Debug:Trace(1, "ArmoryRestoreResponse event fired, result: " .. tostring(result))
+        if CC.arcanistActive() == false then -- NEW u46
+            CC.Debug:Trace(1, "Arcanist not active, removing scene fragments")
+            CruxCounter_Display:RemoveSceneFragments()
+        else
+            CC.Debug:Trace(1, "Arcanist active, adding scene fragments")
+            CruxCounter_Display:AddSceneFragments()
+            return
+        end
+    end)
 
     -- Life or death
     self:Listen("PlayerDead", EVENT_PLAYER_DEAD, onPlayerChanged)

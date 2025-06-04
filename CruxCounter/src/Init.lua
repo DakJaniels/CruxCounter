@@ -2,18 +2,12 @@
 -- Init.lua
 -- -----------------------------------------------------------------------------
 
+--- @class (partial) CruxCounter
 local CC     = CruxCounter
 local EM     = EVENT_MANAGER
 
 --- @type string Namespace for addon init event
 local initNs = CC.Addon.name .. "_Init"
-
---- Is the player's current class an Arcanist?
---- @return boolean
-local function isArcanist()
-    local arcanistClassId = 117
-    return GetUnitClassId("player") == arcanistClassId
-end
 
 --- Unregister the addon
 --- @see EVENT_ADD_ON_LOADED
@@ -23,16 +17,10 @@ local function unregister()
 end
 
 --- Initialize the addon
+--- @param eventId integer
 --- @param addonName string Name of the addon loaded
 --- @return nil
-local function init(_, addonName)
-    -- Skip non-Arcanist classes
-    if not isArcanist() then
-        -- Unregister event to prevent being called again
-        unregister()
-        return
-    end
-
+local function init(eventId, addonName)
     -- Skip addons that aren't this one
     if addonName ~= CC.Addon.name then return end
 

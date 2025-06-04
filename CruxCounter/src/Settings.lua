@@ -2,6 +2,7 @@
 -- Settings.lua
 -- -----------------------------------------------------------------------------
 
+--- @class (partial) CruxCounter
 local CC                  = CruxCounter
 local LAM                 = LibAddonMenu2
 local M                   = {}
@@ -32,6 +33,7 @@ M.defaults       = {
     locked          = false,
     lockToReticle   = false,
     size            = 128,
+    debugLevel      = 0, -- 0: Off, 1: Low, 2: Medium, 3: High
     elements        = {
         number     = {
             enabled = true,
@@ -972,6 +974,46 @@ local soundOptions = {
 }
 
 -- -----------------------------------------------------------------------------
+-- Debug
+-- -----------------------------------------------------------------------------
+
+--- Set the debug level
+--- @param level integer Debug level (0-3)
+--- @return nil
+local function setDebugLevel(level)
+    M.settings.debugLevel = level
+    CC.Debug.level = level
+end
+
+--- Get the current debug level
+--- @return integer level Current debug level
+local function getDebugLevel()
+    return M.settings.debugLevel
+end
+
+--- @type table Options for Debug settings
+local debugOptions = {
+    {
+        type = "header",
+        name = "Debug",
+        width = "full",
+    },
+    {
+        type = "dropdown",
+        name = "Debug Level",
+        tooltip = "Set the level of debug output (0: Off, 1: Low, 2: Medium, 3: High)",
+        choices = { 0, 1, 2, 3 },
+        getFunc = function()
+            return getDebugLevel()
+        end,
+        setFunc = function(level)
+            setDebugLevel(level)
+        end,
+        width = "full",
+    },
+}
+
+-- -----------------------------------------------------------------------------
 -- Setup
 -- -----------------------------------------------------------------------------
 
@@ -1053,6 +1095,7 @@ function M:Setup()
     addToMenu(displayOptions)
     addToMenu(styleOptions)
     addToMenu(soundOptions)
+    addToMenu(debugOptions) -- Add debug options to menu
 
     LAM:RegisterAddonPanel(addon.name, {
         type               = "panel",
@@ -1064,6 +1107,9 @@ function M:Setup()
         slashCommand       = "/cruxcounter",
     })
     LAM:RegisterOptionControls(addon.name, optionsData)
+
+    -- Set initial debug level
+    CC.Debug.level = self.settings.debugLevel
 
     CC.Debug:Trace(2, "Finished InitSettings()")
 end

@@ -2,8 +2,9 @@
 -- State.lua
 -- -----------------------------------------------------------------------------
 
-local M     = {}
+--- @class (partial) CruxCounter
 local CC    = CruxCounter
+local M     = {}
 
 --- @type integer Current number of Crux stacks
 M.stacks    = 0

@@ -2,12 +2,12 @@
 -- Orbit.lua
 -- -----------------------------------------------------------------------------
 
-local AM          = ANIMATION_MANAGER
+--- @class (partial) CruxCounter
 local CC          = CruxCounter
-
 local Rune        = CruxCounter_Rune
+local AM          = GetAnimationManager()
 
---- @class CruxCounter_Orbit
+--- @class CruxCounter_Orbit : ZO_InitializingObject
 --- @field New fun(self, control: any, index: number)
 CruxCounter_Orbit = ZO_InitializingObject:Subclass()
 

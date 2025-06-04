@@ -2,6 +2,7 @@
 -- Interface.lua
 -- -----------------------------------------------------------------------------
 
+--- @class (partial) CruxCounter
 local CC = CruxCounter
 local M  = {}
 

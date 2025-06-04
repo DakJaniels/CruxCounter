@@ -2,6 +2,7 @@
 -- Debug.lua
 -- -----------------------------------------------------------------------------
 
+--- @class (partial) CruxCounter
 local CC = CruxCounter
 local M  = {}
 
@@ -17,7 +18,13 @@ M.level  = 0
 --- @return nil
 function M:Say(...)
     local prefix = "[" .. CC.Addon.name .. "] "
-    d(prefix .. zo_strformat(...))
+    local args = {...}
+    for i, v in ipairs(args) do
+        if type(v) == "boolean" then
+            args[i] = tostring(v)
+        end
+    end
+    d(prefix .. zo_strformat(unpack(args)))
 end
 
 --- Output a trace if the level is within the current debug level.

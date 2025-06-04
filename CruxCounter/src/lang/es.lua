@@ -2,8 +2,9 @@
 -- lang/es.lua
 -- -----------------------------------------------------------------------------
 
-local M = {}
+--- @class (partial) CruxCounter
 local CC = CruxCounter
+local M = {}
 
 --- Setup translation strings
 --- @return nil

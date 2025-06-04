@@ -2,6 +2,7 @@
 -- Addon.lua
 -- -----------------------------------------------------------------------------
 
+--- @class (partial) CruxCounter
 CruxCounter = {}
 
 --- @type { name: string, version: string } General addon information

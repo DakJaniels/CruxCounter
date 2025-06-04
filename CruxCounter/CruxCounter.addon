@@ -3,7 +3,7 @@
 ## SavedVariables: CruxCounterData
 ## Description: Got Crux?
 ## Version: 1.4.0
-## AddOnVersion: 010200
+## AddOnVersion: 010400
 ## Author: |cFFCCCC@g4rr3t|r (NA)
 ## DependsOn: LibAddonMenu-2.0>=40
 
@@ -23,6 +23,7 @@ src/Language.lua
 src/Settings.lua
 src/Interface.lua
 src/State.lua
+src/Subclass.lua
 src/Events.lua
 src/Init.lua
 

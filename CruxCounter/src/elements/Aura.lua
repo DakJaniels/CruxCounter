@@ -2,12 +2,13 @@
 -- Aura.lua
 -- -----------------------------------------------------------------------------
 
-local WM         = WINDOW_MANAGER
+--- @class (partial) CruxCounter
 local CC         = CruxCounter
 local Orbit      = CruxCounter_Orbit
 local Ring       = CruxCounter_Ring
+local WM         = GetWindowManager()
 
---- @class CruxCounter_Aura
+--- @class CruxCounter_Aura : ZO_InitializingObject
 --- @field New fun(self, control: any)
 CruxCounter_Aura = ZO_InitializingObject:Subclass()
 
@@ -20,8 +21,8 @@ function CruxCounter_Aura:Initialize(control)
     self.hideOutOfCombat = CC.Settings:Get("hideOutOfCombat")
     self.locked = CC.Settings:Get("locked")
 
-    self.ring = Ring:New(control:GetNamedChild("BG"))
-    self.orbit = Orbit:New(control:GetNamedChild("Orbit"))
+    self.ring = Ring:New(control:GetNamedChild("BG")) --[[@as CruxCounter_Ring]]
+    self.orbit = Orbit:New(control:GetNamedChild("Orbit")) --[[@as CruxCounter_Orbit]]
     self.count = control:GetNamedChild("Count")
 
     self:SetHandlers()
@@ -171,9 +172,10 @@ function CruxCounter_Aura:SetMovable(movable)
 end
 
 --- Initialization of the Aura display
+---@param control CruxCounter_Aura
 --- @return nil
 function CruxCounter_Aura_OnInitialized(control)
-    CruxCounter_Display = CruxCounter_Aura:New(control)
+    CruxCounter_Display = CruxCounter_Aura:New(control) --[[@as CruxCounter_Aura]]
 end
 
 --- When the Aura has stopped moving, handle the move

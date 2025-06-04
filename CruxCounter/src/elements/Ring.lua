@@ -2,10 +2,11 @@
 -- Ring.lua
 -- -----------------------------------------------------------------------------
 
-local AM         = ANIMATION_MANAGER
-local CC         = CruxCounter
+local AM          = GetAnimationManager()
+--- @class (partial) CruxCounter
+local CC          = CruxCounter
 
---- @class CruxCounter_Ring
+--- @class CruxCounter_Ring : ZO_InitializingObject
 --- @field New fun(self, control: any)
 CruxCounter_Ring = ZO_InitializingObject:Subclass()
 

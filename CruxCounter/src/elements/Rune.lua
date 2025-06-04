@@ -2,10 +2,11 @@
 -- Rune.lua
 -- -----------------------------------------------------------------------------
 
-local AM          = ANIMATION_MANAGER
+
+local AM          = GetAnimationManager()
 local orbitRadius = 32
 
---- @class CruxCounter_Rune
+--- @class CruxCounter_Rune : ZO_InitializingObject
 --- @field New fun(self, control: any, index: number)
 CruxCounter_Rune  = ZO_InitializingObject:Subclass()
 
