@@ -8,7 +8,7 @@ CruxCounter = {}
 --- @type { name: string, version: string } General addon information
 local M = {
     name    = "CruxCounter",
-    version = "1.4.1",
+    version = "2025.06.11",
 }
 
 CruxCounter.Addon = M
