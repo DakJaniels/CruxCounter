@@ -23,7 +23,6 @@ src/Language.lua
 src/Settings.lua
 src/Interface.lua
 src/State.lua
-src/Subclass.lua
 src/Events.lua
 src/Init.lua
 

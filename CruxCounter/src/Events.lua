@@ -61,11 +61,40 @@ local function onCombatChanged(eventId, inCombat)
     end
 end
 
+--- Is the player's current class an Arcanist?
+--- @return boolean
+local function isArcanist()
+    local arcanistClassId = 117
+    return GetUnitClassId("player") == arcanistClassId
+end
+
+--- Skill lines that are considered Arcanist
+--- @type table<integer, boolean>
+local arcanistSkillLines = {
+    [218] = true, -- "Herald of the Tome"
+    [219] = true, -- "Soldier of Apocrypha"
+    [220] = true, -- "Curative Runeforms"
+}
+
+--- Check if the player is an Arcanist
+--- @return boolean
+local function arcanistActive()
+    if isArcanist() then return true end
+
+    for skillLineId in pairs(arcanistSkillLines) do
+        local skillLineData = SKILLS_DATA_MANAGER:GetSkillLineDataById(skillLineId)
+        if skillLineData and skillLineData:IsActive() then
+            return true
+        end
+    end
+    return false
+end
+
 --- Respond to player life/death/zone/load changes.
 --- Note: Sound playback skipped for these stack transitions
 --- @return nil
 local function onPlayerChanged()
-    if CC.arcanistActive() == false then -- NEW u46
+    if arcanistActive() == false then -- NEW u46
         CruxCounter_Display:RemoveSceneFragments()
         return
     end
@@ -152,7 +181,7 @@ function M:RegisterEvents()
     )
     self:Listen("SkillsFullUpdate", EVENT_SKILLS_FULL_UPDATE, function()
         CC.Debug:Trace(1, "SkillsFullUpdate event fired")
-        if CC.arcanistActive() == false then -- NEW u46
+        if arcanistActive() == false then -- NEW u46
             CC.Debug:Trace(1, "Arcanist not active, removing scene fragments")
             CruxCounter_Display:RemoveSceneFragments()
             return
@@ -161,7 +190,7 @@ function M:RegisterEvents()
 
     self:Listen("ArmoryRestoreResponse", EVENT_ARMORY_BUILD_RESTORE_RESPONSE, function(eventId, result, buildIndex)
         CC.Debug:Trace(1, "ArmoryRestoreResponse event fired, result: " .. tostring(result))
-        if CC.arcanistActive() == false then -- NEW u46
+        if arcanistActive() == false then -- NEW u46
             CC.Debug:Trace(1, "Arcanist not active, removing scene fragments")
             CruxCounter_Display:RemoveSceneFragments()
         else
